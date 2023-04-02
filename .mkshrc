@@ -1,0 +1,109 @@
+#!/bin/ksh
+export QT_QPA_PLATFORM=wayland
+export MOZ_ENABLE_WAYLAND=1
+export EDITOR="vim"
+QT_QPA_PLATFORMTHEME=kvantum
+QT_STYLE_OVERRIDE=kvantum
+export QT_STYLE_OVERIDE
+export QT_QPA_PLATFORMTHEME
+alias ls='ls --color=auto'
+if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+	if test -z "${XDG_RUNTIME_DIR}"; then
+	    export XDG_RUNTIME_DIR="/tmp/$(id -u)-sway"
+	    if ! test -d "${XDG_RUNTIME_DIR}"; then
+	        mkdir "${XDG_RUNTIME_DIR}"
+	        chmod 0700 "${XDG_RUNTIME_DIR}"
+	    fi
+	fi
+	exec sway
+fi
+ex() {
+	execlineb $@
+}
+#PS1=$'\1\r\1\e[31m\1$ \1\e[0m\1\e]0;${PWD/#"/home/ntk"/\~}\a'
+#PS1='${PWD/#"$HOME"/\~} '$'\1\r\1\e[31m\1$ \1\e[0m\e]0;${PWD/#"/home/ntk"/\~}\a'
+PS1='${PWD/#"$HOME"/\~} '$'\1\r\1\e[31m\1$ \1\e[0m'
+export QT_QPA_PLATFORM=wayland
+export MOZ_ENABLE_WAYLAND=1
+export EDITOR="emacs"
+export QT_QPA_PLATFORMTHEME=qt5ct
+export QT_STYLE_OVERRIDE=qt5ct-style
+alias ls='ls --color=auto'
+if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+	read -rn1 -p '> Sway?' ask
+	case $ask in
+		'a'|'y'|'s')
+			if test -z "${XDG_RUNTIME_DIR}"; then
+				export XDG_RUNTIME_DIR="/tmp/$(id -u)-sway"
+				if ! test -d "${XDG_RUNTIME_DIR}"; then
+					mkdir "${XDG_RUNTIME_DIR}"
+					chmod 0700 "${XDG_RUNTIME_DIR}"
+				fi
+			fi
+			exec sway
+			;;
+	esac
+fi
+ex() {
+	execlineb $@
+}
+e() {
+	execlineb -c "$@"
+}
+cpuboost() {
+	doas sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost'
+}
+nosus() {
+	doas sv down acpid
+}
+yessus() {
+	doas sv up acpid
+}
+brlall() {
+	for stratum in $(brl list); {
+		print "${stratum}:"
+		strat "${stratum}" "$@"
+	}
+}
+alias ge='emacs --no-window-system'
+alias he='nvim'
+alias bxe='bashbox bano'
+alias xr='xbps-query -R'
+alias btom='btm --basic'
+alias tv='mpv --vo=tct'
+alias d='date +%s'
+alias fp='realpath'
+
+rz() {
+	zig build-exe "$1"
+	IFS='.'
+	filename="${1%/}"
+	filename="${filename##*/}"
+	filenamesplit=($filename)
+	./"${filenamesplit[0]}"
+}
+[ $TERM = linux ] && {
+	PS1='\033[48;5;200m \e[0m '
+	if [ "$TERM" = "linux" ]; then
+		#echo -en "\e]P01d2021" #černá
+		echo -en "\e]P0000000" #černá
+		echo -en "\e]P8888888" #tmavě bílá
+		echo -en "\e]P1bb2040" #červená
+		echo -en "\e]P9ff4066" #světle červená
+		echo -en "\e]P2338060" #zelená
+		echo -en "\e]PA55aa80" #světle zelená
+		echo -en "\e]P3cc8844" #žlutá
+		echo -en "\e]PBffcc88" #světle žlutá
+		echo -en "\e]P6655aa" #modrá
+		echo -en "\e]PC8070dd" #světle modrá
+		echo -en "\e]P5bb55bb" #fialová
+		echo -en "\e]PDdd77dd" #světle fialová
+		echo -en "\e]P6447099" #tyrkysová
+		echo -en "\e]PE66aaaa" #světle tyrkysová
+		echo -en "\e]P7444444" #světle černá
+		echo -en "\e]PFffffff" #bílá
+		#clear #for background artifacting
+	fi
+}
+#abcdefghchijklmnopqrstuvwxyz
+alias xrr='xr -R'
