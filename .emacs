@@ -7,6 +7,7 @@
 (add-hook 'emacs-startup-hook
 (lambda ()
   (setq gc-cons-threshold (expt 2 23))))
+(load-theme 'bloat t)
 ;;colours something idk
 ;theme
 
@@ -70,7 +71,7 @@
  '(highlight-indent-guides-method 'character)
  '(highlight-indent-guides-responsive 'top)
  '(package-selected-packages
-   '(empv evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
+   '(pdf-tools empv evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
  '(standard-indent -1)
  '(warning-suppress-log-types
    '(((flycheck syntax-checker))
@@ -90,6 +91,8 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "#000000" :foreground "#ebdbb2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "slavfox" :family "Cozette"))))
  '(line-number ((t (:foreground "#ff7090"))))
+ '(line-number-current-line ((t (:foreground "#66ffbb"))))
+ '(mode-line ((t (:box nil "#a0a0a0" :background "color-16" nil))))
  '(separator-line ((t (:foreground "#ff7090")))))
 
 (global-hl-todo-mode +1)
@@ -183,7 +186,6 @@
 
 ;(require 'evil)
 ;(evil-mode 1)
-(load-theme 'bloat t)
 (add-to-list 'default-frame-alist '(font . "-slavfox-Cozette-normal-normal-normal-*-13-*-*-*-m-60-iso10646-1" ))
 (set-face-attribute 'default t :font "-slavfox-Cozette-normal-normal-normal-*-13-*-*-*-m-60-iso10646-1" )
 (set-face-attribute 'default nil :font "-slavfox-Cozette-normal-normal-normal-*-13-*-*-*-m-60-iso10646-1" )
@@ -192,3 +194,8 @@
 (if (not (display-graphic-p))
     (set-face-background 'default "#ff000000"))
 
+(require 'pdf-tools)
+;(setq pdf-view-use-scaling nil)
+(add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
+
+(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))

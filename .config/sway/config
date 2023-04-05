@@ -1,6 +1,5 @@
 exec gsettings set org.gnome.desktop.interface gtk-theme 'Matcha-dark-pueril'
 exec gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' 
-#xwayland disable
 exec pipewire
 exec pipewire-pulse
 # Logo key. Use Mod1 for Alt.

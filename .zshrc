@@ -117,4 +117,4 @@ wm() {
 	exec "$1"
 }
 alias dotsgit="git --git-dir=$HOME/src/dots --work-tree=$HOME"
-alias dots="./src/dots/dots"
+alias dots="${HOME}/src/dots/dots"
