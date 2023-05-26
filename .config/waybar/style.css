@@ -6,10 +6,6 @@
 }
 
 window#waybar {
-    /*background-color:  rgba(0, 0, 0, 0);*/
-    /*border-bottom: 4px solid rgba(255, 64, 128, 0.5);*/
-    /*border-bottom: 4px solid rgba(255, 64, 128, 0.5);*/
-	/*background-color: #1d2021;*/
 	background-color: #000000;
     color: #ffffff;
     transition-property: background-color;
@@ -98,13 +94,12 @@ window#waybar.termite {
 
 #battery {
 	background-color: transparent;
-	border-bottom: 0px solid #338066;
-	color: #55aa80;
+	color: #bb55bb;
 	margin: 0px 0px 0px 4px;
 }
 
 #battery.charging, #battery.plugged {
-	background-color: #55aa80;
+	background-color: #bb55bb;
 	border-bottom: none;
     /*color: #689d6a;*/
     color: #000000;
@@ -133,14 +128,12 @@ label:focus {
 
 #cpu {
 	background-color: transparent;
-	color: #005060;
-	border-bottom: 0px solid #005060;
+	color: #cc8844;
 }
 
 #memory {
     background-color: transparent;
-    color: #bb55bb;
-	border-bottom: 0px solid #bb55bb;
+    color: #338066;
 }
 
 #disk {
@@ -150,23 +143,21 @@ label:focus {
 #backlight {
 	background-color: transparent;
 	/*color: #9aff00;*/
-	color: #ffcc88;
-	border-bottom: 0px solid #ffcc88;
+	color: #6655aa;
+	border-bottom: 0px solid #6655aa;
 	}
 
 #network {
     /*background-color: #2980b9;*/
 	background-color: transparent;
-	color: #6655aa;
+	color: #cc5533;
 	margin: 0px 4px 0px 0px;
-	border-bottom: 0px solid #6655aa;
 }
 #custom-nmwtf {
     /*background-color: #2980b9;*/
 	background-color: transparent;
-	color: #6655aa;
+	color: #cc5533;
 	margin: 0px 0px 0px 4px;
-	border-bottom: 0px solid #6655aa;
 }
 
 #network.disconnected {
@@ -175,8 +166,7 @@ label:focus {
     color: #000000;
 }
 #bluetooth {
-	border-bottom: 0px solid #228bba;
-	color: #228bba;
+	color: #ff2800;
 }
 #bluetooth.disabled {
 	border-bottom: 0px solid #444444;
@@ -185,8 +175,7 @@ label:focus {
 
 #pulseaudio {
 	background-color: transparent;
-	color: #cc8844;
-	border-bottom: 0px solid #cc8844;
+	color: #bb2040;
 }
 
 #pulseaudio.muted {
@@ -211,8 +200,7 @@ label:focus {
 
 #temperature {
 	background-color: transparent;
-	color: #ff4066;
-	border-bottom: 0px solid #ff4066;
+	color: #447099;
 }
 
 #temperature.critical {

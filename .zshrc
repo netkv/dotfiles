@@ -1,24 +1,27 @@
 #!/bin/zsh
+export DIALOGRC="/home/ntk/.dialog.conf"
 export QT_QPA_PLATFORM=wayland
 export MOZ_ENABLE_WAYLAND=1
 export EDITOR="emacs"
-export QT_QPA_PLATFORMTHEME=qt5ct
-export QT_STYLE_OVERRIDE=qt5ct-style
+export QT_QPA_PLATFORMTHEME=qt6ct
+export QT_STYLE_OVERRIDE=qt6ct-style
+execsway() {
+	if test -z "${XDG_RUNTIME_DIR}"; then
+		export XDG_RUNTIME_DIR="/tmp/$(id -u)-sway"
+		if ! test -d "${XDG_RUNTIME_DIR}"; then
+			mkdir "${XDG_RUNTIME_DIR}"
+			chmod 0700 "${XDG_RUNTIME_DIR}"
+		fi
+	fi
+	vblank_mode=0 exec sway
+}
 
 alias ls='ls --color=auto'
 if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
 	read -r ask
 	case $ask in
 		'a'|'y'|'s')
-			if test -z "${XDG_RUNTIME_DIR}"; then
-				export XDG_RUNTIME_DIR="/tmp/$(id -u)-sway"
-				if ! test -d "${XDG_RUNTIME_DIR}"; then
-					mkdir "${XDG_RUNTIME_DIR}"
-					chmod 0700 "${XDG_RUNTIME_DIR}"
-				fi
-			fi
-			exec sway
-			;;
+			execsway;;
 	esac
 fi
 
@@ -59,30 +62,28 @@ alias d='date +%s'
 alias fp='realpath'
 alias xrr='xr -R'
 
-[ $TERM = linux ] && {
+[ "$TERM" = "linux" ] && {
 	PS1='\033[48;5;200m \e[0m '
-	if [ "$TERM" = "linux" ]; then
-
-		setfont cozette
-		#echo -en "\e]P01d2021" #černá
-		echo -en "\e]P0000000" #černá
-		echo -en "\e]P8888888" #tmavě bílá
-		echo -en "\e]P1bb2040" #červená
-		echo -en "\e]P9ff4066" #světle červená
-		echo -en "\e]P2338060" #zelená
-		echo -en "\e]PA55aa80" #světle zelená
-		echo -en "\e]P3cc8844" #žlutá
-		echo -en "\e]PBffcc88" #světle žlutá
-		echo -en "\e]P6655aa" #modrá
-		echo -en "\e]PC8070dd" #světle modrá
-		echo -en "\e]P5bb55bb" #fialová
-		echo -en "\e]PDdd77dd" #světle fialová
-		echo -en "\e]P6447099" #tyrkysová
-		echo -en "\e]PE66aaaa" #světle tyrkysová
-		echo -en "\e]P7444444" #světle černá
-		echo -en "\e]PFffffff" #bílá
-		#clear #for background artifacting
-	fi
+	setfont cozette
+	#echo -en "\e]P01d2021" #černá
+	echo -en "\e]P0000000" #černá
+	echo -en "\e]P8888888" #tmavě bílá
+	echo -en "\e]P1bb2040" #červená
+	echo -en "\e]P9ff4066" #světle červená
+	echo -en "\e]P2338060" #zelená
+	echo -en "\e]PA55aa80" #světle zelená
+	echo -en "\e]P3cc8844" #žlutá
+	echo -en "\e]PBffcc88" #světle žlutá
+	echo -en "\e]P6655aa" #modrá
+	echo -en "\e]PC8070dd" #světle modrá
+	echo -en "\e]P5bb55bb" #fialová
+	echo -en "\e]PDdd77dd" #světle fialová
+	echo -en "\e]P6447099" #tyrkysová
+	echo -en "\e]PE66aaaa" #světle tyrkysová
+	echo -en "\e]P7444444" #světle černá
+	echo -en "\e]PFffffff" #bílá
+	#clear #for background artifacting
+	printf '\033[?112c'
 }
 
 HISTFILE=~/.histfile
@@ -118,3 +119,8 @@ wm() {
 }
 alias dotsgit="git --git-dir=$HOME/src/dots --work-tree=$HOME"
 alias dots="${HOME}/src/dots/dots"
+copy() {
+	alacritty &
+	disown
+}
+bindkey -e

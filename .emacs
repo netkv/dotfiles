@@ -71,10 +71,11 @@
  '(highlight-indent-guides-method 'character)
  '(highlight-indent-guides-responsive 'top)
  '(package-selected-packages
-   '(pdf-tools empv evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
+   '(pdf-tools evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
  '(standard-indent -1)
  '(warning-suppress-log-types
-   '(((flycheck syntax-checker))
+   '((comp)
+	 ((flycheck syntax-checker))
 	 ((flycheck syntax-checker))
 	 ((flycheck syntax-checker))
 	 ((flycheck syntax-checker))))
@@ -123,7 +124,7 @@
 (global-prettify-symbols-mode 1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'after-init-hook 'global-flycheck-mode)
 (mouse-wheel-mode t)
  ;;(menu-bar-mode -1) 
 (global-set-key (kbd "M-o") (lambda () (interactive) (save-buffers-kill-terminal)))
@@ -170,7 +171,7 @@
         (default-value 'mode-line-format)) )
   (redraw-display))
 
-(global-set-key [M-f12] 'toggle-mode-line)
+(global-set-key [f9] 'toggle-mode-line)
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
 
@@ -183,7 +184,7 @@
 ;
 ;(unless (package-installed-p 'evil)
 ;  (package-install 'evil))
-
+;
 ;(require 'evil)
 ;(evil-mode 1)
 (add-to-list 'default-frame-alist '(font . "-slavfox-Cozette-normal-normal-normal-*-13-*-*-*-m-60-iso10646-1" ))
@@ -198,4 +199,49 @@
 ;(setq pdf-view-use-scaling nil)
 (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
 
-(add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'pdf-view-mode-hook (lambda ()
+								(setq initial-frame-alist (append '((minibuffer . nil)) initial-frame-alist))
+								(setq default-frame-alist (append '((minibuffer . nil)) default-frame-alist))
+								(setq minibuffer-auto-raise t)
+								(setq minibuffer-exit-hook '(lambda () (lower-frame)))
+
+								(display-line-numbers-mode -1)
+								(setq-default message-log-max nil)
+								(kill-buffer "*Messages*")
+								))
+(defun duplicate-line (arg)
+  "Duplicate current line, leaving point in lower line."
+  (interactive "*p")
+
+  ;; save the point for undo
+  (setq buffer-undo-list (cons (point) buffer-undo-list))
+
+  ;; local variables for start and end of line
+  (let ((bol (save-excursion (beginning-of-line) (point)))
+        eol)
+    (save-excursion
+
+      ;; don't use forward-line for this, because you would have
+      ;; to check whether you are at the end of the buffer
+      (end-of-line)
+      (setq eol (point))
+
+      ;; store the line and disable the recording of undo information
+      (let ((line (buffer-substring bol eol))
+            (buffer-undo-list t)
+            (count arg))
+        ;; insert the line arg times
+        (while (> count 0)
+          (newline)         ;; because there is no newline in 'line'
+          (insert line)
+          (setq count (1- count)))
+        )
+
+      ;; create the undo information
+      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
+    ) ; end-of-let
+
+  ;; put the point in the lowest line and return
+  (next-line arg))
+
+(global-set-key (kbd "C-d") 'duplicate-line)

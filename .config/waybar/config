@@ -42,12 +42,12 @@
         }
     },
         "custom/brway": {
-		"on-click": "/home/darek/.config/waybar/brway",
+		"on-click": "/home/ntk/.config/waybar/brway",
 		"interval": 1,
 		"format": "{}: "
     },
         "custom/nmwtf": {
-		"on-click": "/home/darek/.config/waybar/nmwtf",
+		"on-click": "/home/ntk/.config/waybar/nmwtf",
 		"interval": 1,
 		"format": "*"
     },
