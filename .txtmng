@@ -147,9 +147,8 @@ insert XTerm <<EOF
 EOF
 
 insert dots <<'EOF'
-.emacs
+.emacs.d/init.el
 .emacs.d/bloat-theme.el
-.zshrc
 .bashrc
 .mkshrc
 .config/sway/config.template
