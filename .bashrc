@@ -1,105 +1,79 @@
 #!/bin/bash
+date
+export GTK_THEME=Plata:dark
 set -o emacs
 [[ $- != *i* ]] && return
-export QT_QPA_PLATFORM=wayland
-export MOZ_ENABLE_WAYLAND=1
-export EDITOR="emacs"
-export QT_QPA_PLATFORMTHEME=qt5ct
-export QT_STYLE_OVERRIDE=qt5ct-style
-alias ls='ls --color=auto'
-if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-	read -rn1 -p '> Sway?' ask
-	case $ask in
-		'a'|'y'|'s')
-			if test -z "${XDG_RUNTIME_DIR}"; then
-				export XDG_RUNTIME_DIR="/tmp/$(id -u)-sway"
-				if ! test -d "${XDG_RUNTIME_DIR}"; then
-					mkdir "${XDG_RUNTIME_DIR}"
-					chmod 0700 "${XDG_RUNTIME_DIR}"
-				fi
-			fi
-			exec sway
-			;;
-	esac
-fi
-ex() {
-	execlineb $@
-}
-e() {
-	execlineb -c "$@"
-}
+#if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+#	read -rn1 -p '> Sway?' ask
+#	case $ask in
+#		'a'|'y'|'s')
+#			exec wl
+#			;;
+#	esac
+#fi
+[[ $- == *i* ]] && source /bedrock/strata/artix/usr/share/blesh/ble.sh --noattach
 cpuboost() {
 	doas sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost'
 }
-nosus() {
-	doas sv down acpid
-}
-yessus() {
-	doas sv up acpid
-}
-brlall() {
-	for stratum in $(brl list); {
-		print "${stratum}:"
-		strat "${stratum}" "$@"
+function batt
+	case "$1" in
+		p)
+		    printf '%s' "$(</sys/class/power_supply/BAT1/capacity)% ";;
+		*)
+			echo "$(</sys/class/power_supply/BAT1/capacity)%"
+	esac
+	
+function states {
+	printf '\e[?25l'
+	get-c
+	((cy==LINES)) && ((cy--))
+	stty -echo -icanon time 0 min 0
+	printf '\e[;r'
+	{ #\e[K
+		printf '\e[%d;0H\e[30;47m' $LINES
+		printf '%s\e[37;41m▓▒░\e[30m' "$PWD"
+		printf '%s\e[31;43m▓▒░\e[30m' "$(date '+%T    %d.%m.%+4Y')"
+		printf 'tty - %s\e[33;42m▓▒░\e[30m' "$(tty)"
+		printf 'baterie - %s%%\e[32;46m▓▒░\e[30m' "$(</sys/class/power_supply/BAT1/capacity)"
+		printf 'zvuk - %s\e[36;44m▓▒░\e[30m' "$(awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master))"
+		printf 'jas - %s%%\e[34;45m▓▒░\e[30m' "$(</sys/class/backlight/amdgpu_bl0/actual_brightness)"
+		printf 'wifi - %s \e[m\e[35;47m▓▒░\e[K\e[m' "$(wpa_cli status | grep '^ssid' | cut -f2 -d'=')"
 	}
+	printf '\e[?25h'
+	printf '\e[0;%dr' $((LINES-1))
+	printf '\e[%d;%dH' $cy $cx
+	stty sane
 }
-alias ge='emacs --no-window-system'
-alias he='nvim'
-alias bxe='bashbox bano'
-alias xr='xbps-query -R'
-alias btom='btm --basic'
-alias tv='mpv --vo=tct'
-alias d='date +%s'
-alias fp='realpath'
-#PS1="\033[38;2;0;255;17m\w \$ \033[0;0m"
-#PS1="\033[38;2;0;255;147m\$ \033[0;0m"
-#PS1="\033[35m> \033[0;0m"
-#PS1="\e[0;30m▶ "
-PS1="\e[0;31m$\e[0m \e]0;\w\a"
-source /bedrock/strata/arch/usr/share/blesh/ble.sh
+function get-c {
+    IFS='[;' read -p $'\e[6n' -d R -rs _ cy cx _
+}
+
+function reload {
+	exec bash
+}
+
+stratall()
+	for stratum in $(brl list)
+	do
+		printf '\e[31m%s\e[m\n' "$stratum"
+		strat "$stratum" "$@"
+	done
+
+rat() (
+	match="$1"
+	shift
+	cd /bedrock/strata
+	strat "$match"* $@
+)
+
+PS1="\w \[\e[31m\]$\[\e[0m\] \[\e]0;\w\a\]"
 shopt -u globstar
-rz() {
-	zig build-exe "$1"
-	IFS='.'
-	filename="${1%/}"
-	filename="${filename##*/}"
-	filenamesplit=($filename)
-	./"${filenamesplit[0]}"
+[ "$TERM" = linux ] && {
+#	PROMPT_COMMAND="states"
+#	PROMPT_COMMAND="batt -p"
+#	PS1="\[\e[31m\]$\[\e[0m\] \[\e]0;\w\a\]"
+	setup-tty
 }
-[ $TERM = linux ] && {
-	#setfont iso02.14
-	setfont cozette
-	#PS1='\033[48;5;200m \e[0m '
-	if [ "$TERM" = "linux" ]; then
-		#echo -en "\e]P01d2021" #černá
-		echo -en "\e]P0000000" #černá
-		echo -en "\e]P8808080" #tmavě bílá
-		echo -en "\e]P1bb2040" #červená
-		echo -en "\e]P9ff4066" #světle červená
-		echo -en "\e]P2338066" #zelená
-		echo -en "\e]PA55aa80" #světle zelená
-		echo -en "\e]P3cc8844" #žlutá
-		echo -en "\e]PBffcc88" #světle žlutá
-		echo -en "\e]P46655aa" #modrá
-		echo -en "\e]PC8070dd" #světle modrá
-		echo -en "\e]P5bb55bb" #fialová
-		echo -en "\e]PDdd77dd" #světle fialová
-		echo -en "\e]P6447099" #tyrkysová
-		echo -en "\e]PE66aaaa" #světle tyrkysová
-		echo -en "\e]P7444444" #světle černá
-		echo -en "\e]PFffffff" #bílá
-		#clear #for background artifacting
-	fi
-}
-wm() {
-	if test -z "${XDG_RUNTIME_DIR}"; then
-				export XDG_RUNTIME_DIR="/tmp/$(id -u)-wm"
-				if ! test -d "${XDG_RUNTIME_DIR}"; then
-					mkdir "${XDG_RUNTIME_DIR}"
-					chmod 0700 "${XDG_RUNTIME_DIR}"
-				fi
-			fi
-	exec dbus-launch "$1"
-}
-#abcdefghchijklmnopqrstuvwxyz
-alias xrr='xr -R'
+source posix-alias
+source posix-var
+[[ ${BLE_VERSION-} ]] && ble-attach

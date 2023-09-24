@@ -74,6 +74,7 @@
         // "timezone": "Europe/Prague",
         "tooltip-format": "<big>{:%a %e. %b %Y}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%d.%m.%Y}",
+        //"format": "{:%H:%M}",
         "format": "{:%T}",
         //"today-format": "<b><u>{{:%H:%M:%S}}</u></b>"
     },
@@ -95,7 +96,7 @@
         //"format-icons": ["", "", ""]
     },
     "backlight": {
-        // "device": "acpi_video1",
+        //"device": "acpi_video1",
         "format": "{percent}% {icon}",
         "format-icons": ["", ""],
         "on-click": "~/.config/waybar/brgha"

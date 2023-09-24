@@ -1,0 +1,147 @@
+#!/bin/bash
+# txmng rule configuration
+
+# to which files apply substitutions
+# (we can assume being in homedir since ~ doesnt work here)
+
+files=(
+	.config/alacritty/alacritty.yml
+	.config/sway/config
+	.mozilla/firefox/r7kjem5u.default-release/chrome/userChrome.css
+)
+
+# what to replace
+# it's recomended to have some sort of prefix to avoid replacing words which
+# should not have been replaced.
+
+rules=(
+	[!?foreground]='cccccc'
+	[!?background]='000000'
+	
+	[!?black]='101010'
+	[!?red]='bb2040'
+	[!?green]='338066'
+	[!?yellow]='cc8844'
+	[!?blue]='6655aa'
+	[!?magenta]='bb55bb'
+	[!?cyan]='447099'
+	[!?white]='808080'
+	[!?bright-black]='222222'
+	[!?bright-red]='ff4066'
+	[!?bright-green]='55aa80'
+	[!?bright-yellow]='ffcc88'
+	[!?bright-blue]='8070dd'
+	[!?bright-magenta]='dd77dd'
+	[!?bright-cyan]='66aaaa'
+	[!?bright-white]='ffffff'
+)
+
+function bright {
+	rules=(
+		[!?foreground]='000000'
+		[!?background]='cccccc'
+		
+		[!?black]='222222'
+		[!?red]='ff4066'
+		[!?green]='55aa80'
+		[!?yellow]='ffcc88'
+		[!?blue]='8070dd'
+		[!?magenta]='dd77dd'
+		[!?cyan]='66aaaa'
+		[!?white]='ffffff'
+		[!?bright-black]='101010'
+		[!?bright-red]='bb2040'
+		[!?bright-green]='338066'
+		[!?bright-yellow]='cc8844'
+		[!?bright-blue]='6655aa'
+		[!?bright-magenta]='bb55bb'
+		[!?bright-cyan]='447099'
+		[!?bright-white]='808080'
+	)
+}
+#bright
+
+rules+=(
+	[!?focused]="${rules[!?red]}"
+	[!?unfocused]='ff808080'
+)
+
+function gruvbox {
+	rules+=(
+		#! hard contrast: *background: #1d2021
+		[!?background]=282828
+		#! soft contrast: *background: #32302f
+		[!?foreground]=ebdbb2
+		#! Black + DarkGrey
+		[!?black]=282828
+		[!?bright-black]=928374
+		#! DarkRed + Red
+		[!?red]=cc241d
+		[!?bright-red]=fb4934
+		#! DarkGreen + Green
+		[!?green]=98971a
+		[!?bright-green]=b8bb26
+		#! DarkYellow + Yellow
+		[!?yellow]=d79921
+		[!?bright-yellow]=fabd2f
+		#! DarkBlue + Blue
+		[!?blue]=458588
+		[!?bright-blue]=83a598
+		#! DarkMagenta + Magenta
+		[!?magenta]=b16286
+		[!?bright-magenta]=d3869b
+		#! DarkCyan + Cyan
+		[!?cyan]=689d6a
+		[!?bright-cyan]=8ec07c
+		#! LightGrey + White
+		[!?white]=a89984
+		[!?bright-white]=ebdbb2
+	)
+}
+
+function sex {
+	rules+=(
+		[!?background]="262626"
+		[!?foreground]="dde1e6"
+		[!?black]="262626"
+		[!?magenta]="ff7eb6"
+		[!?green]="42be65"
+		[!?yellow]="ffe97b"
+		[!?blue]="33b1ff"
+		[!?red]="ee5396"
+		[!?cyan]="3ddbd9"
+		[!?white]="dde1e6"
+
+		[!?bright-black]="393939"
+		[!?bright-magenta]="ff7eb6"
+		[!?bright-green]="42be65"
+		[!?bright-yellow]="ffe97b"
+		[!?bright-blue]="33b1ff"
+		[!?bright-red]="ee5396"
+		[!?bright-cyan]="3ddbd9"
+		[!?bright-white]="ffffff"
+	)
+}
+
+###########################
+
+insert XTerm <<EOF
+*background: #${rules[!?background]}
+*foreground: #${rules[!?foreground]}
+*color0:  #${rules[!?black]}
+*color8:  #${rules[!?bright-black]}
+*color1:  #${rules[!?red]}
+*color9:  #${rules[!?bright-red]}
+*color2:  #${rules[!?green]}
+*color10: #${rules[!?bright-green]}
+*color3:  #${rules[!?yellow]}
+*color11: #${rules[!?bright-yellow]}
+*color4:  #${rules[!?blue]}
+*color12: #${rules[!?bright-blue]}
+*color5:  #${rules[!?magenta]}
+*color13: #${rules[!?bright-magenta]}
+*color6:  #${rules[!?cyan]}
+*color14: #${rules[!?bright-cyan]}
+*color7:  #${rules[!?white]}
+*color15: #${rules[!?bright-white]}
+EOF
