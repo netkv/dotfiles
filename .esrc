@@ -1,0 +1,57 @@
+#!/usr/bin/env es
+QT_QPA_PLATFORM=wayland
+MOZ_ENABLE_WAYLAND=1
+EDITOR="emacs"
+QT_QPA_PLATFORMTHEME=qt5ct
+QT_STYLE_OVERRIDE=qt5ct-style
+let (c = \001\033; z = \002) {
+	prompt = $c[0\;31m$z'$ '$c[0m$z
+}
+fn ve { vim $* }
+fn ls { `{which ls} --color\=auto $* }
+fn ge { emacs --no-window-system $* }
+fn e {
+	em $* &
+	exit
+}
+fn em {
+	emacs $*
+	alacritty
+}
+fn xr { xbps-query -R $* }
+fn bm { btm --basic }
+fn tv { mpv --vo'='tct $* }
+
+if { { test -z "$DISPLAY" } && { ~ `(tty) '/dev/tty1' } } {
+	echo 'sway?'
+	ans = <={%read}
+	if {~ $ans y* Y* a* A*} {
+		if { test -z $XDG_RUNTIME_DIR } {
+			XDG_RUNTIME_DIR=/tmp/^`{id -u}^-sway }
+		if { ! test -d $XDG_RUNTIME_DIR } {
+			mkdir $XDG_RUNTIME_DIR
+			chmod 0700 $XDG_RUNTIME_DIR }
+exec sway } }
+
+			#`
+
+if { { false } } {
+	echo -en "\e]P0000000" #černá
+	echo -en "\e]P8808080" #tmavě bílá
+	echo -en "\e]P1bb2040" #červená
+	echo -en "\e]P9ff4066" #světle červená
+	echo -en "\e]P2338066" #zelená
+	echo -en "\e]PA55aa80" #světle zelená
+	echo -en "\e]P3cc8844" #žlutá
+	echo -en "\e]PBffcc88" #světle žlutá
+	echo -en "\e]P46655aa" #modrá
+	echo -en "\e]PC8070dd" #světle modrá
+	echo -en "\e]P5bb55bb" #fialová
+	echo -en "\e]PDdd77dd" #světle fialová
+	echo -en "\e]P6447099" #tyrkysová
+	echo -en "\e]PE66aaaa" #světle tyrkysová
+	echo -en "\e]P7444444" #světle černá
+	echo -en "\e]PFffffff" #bílá
+	#clear #for background artifacting
+	setfont cozette
+}

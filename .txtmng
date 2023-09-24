@@ -145,3 +145,17 @@ insert XTerm <<EOF
 *color7:  #${rules[!?white]}
 *color15: #${rules[!?bright-white]}
 EOF
+
+insert dots <<'EOF'
+.emacs
+.emacs.d/bloat-theme.el
+.zshrc
+.bashrc
+.mkshrc
+.config/sway/config.template
+.config/waybar/config
+.config/waybar/style.css
+.config/alacritty/alacritty.yml.template
+.txtmng
+.esrc
+EOF
