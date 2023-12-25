@@ -79,7 +79,7 @@ window:
 
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: true
-  opacity: 1
+  opacity: !?alacritty:opacity
 
   # Window class (Linux/BSD only):
   #class:

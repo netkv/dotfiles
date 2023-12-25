@@ -11,7 +11,7 @@ set -o emacs
 #			;;
 #	esac
 #fi
-[[ $- == *i* ]] && source /bedrock/strata/artix/usr/share/blesh/ble.sh --noattach
+#[[ $- == *i* ]] && source /bedrock/strata/artix/usr/share/blesh/ble.sh --noattach
 cpuboost() {
 	doas sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost'
 }
@@ -76,4 +76,4 @@ shopt -u globstar
 }
 source posix-alias
 source posix-var
-[[ ${BLE_VERSION-} ]] && ble-attach
+#[[ ${BLE_VERSION-} ]] && ble-attach

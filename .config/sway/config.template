@@ -24,20 +24,29 @@ set $menu bemenu-run -H 24\
 
 ### Output configuration
 #
+#output * bg "~/garbáž/zdje/crnagora.jpg" fill
+#output * bg "~/garbáž/zdje/lucrn.png" fill
 #output * bg "~/Stažené/antre4.png" fill
 #output * bg "~/Stažené/oknart.png" fill
 #output * bg "~/Stažené/blut.png" tile
+#output * bg "~/garbáž/zdje/coloa.png" tile
+output * bg "~/garbáž/zdje/hele.png" tile
 #output * bg "~/garbáž/zdje/hente2.png" fill
 #output * bg "~/garbáž/zdje/wargir.jpg" fill
 #output * bg "~/garbáž/zdje/kytk.jpg" fill
 #output * bg "~/garbáž/zdje/munt.png" Fill
 #output * bg "~/garbáž/zdje/hellme.png" Fill
 #output * bg "~/garbáž/zdje/px-hyperdzjapan-final.png" Center
-output * bg "~/garbáž/zdje/anglered.png" Fill
+#output * bg "~/garbáž/zdje/px-hypersky.jpg" Center
+#output * bg "~/garbáž/zdje/removethegirl.png" Fill
+#output * bg "~/garbáž/zdje/removethegir-darkl.png" Fill
+#output * bg "~/garbáž/zdje/angleredg.png" Fill
+#output * bg "~/garbáž/zdje/anglepur.png" Fill
 #output * bg "~/garbáž/zdje/angle.jpg" Fill
 #output * bg "~/garbáž/zdje/hentei.png" Fill
 #output * bg "~/garbáž/zdje/px-vesmíř.png" Center
 #output * bg "~/garbáž/zdje/px-hyperdzjapan.jpg" Fill
+#output * bg "~/garbáž/zdje/mecz.jpg" Fill
 
 output * scale_filter nearest
 
@@ -62,9 +71,11 @@ input "2:7:SynPS/2_Synaptics_TouchPad" {
 	pointer_accel 0.25 # set mouse sensitivity (between -1 and 1)
 }
 input * {
-	xkb_layout "cz"
+	xkb_layout "cz,cz"
+	xkb_variant ",rus"
 	xkb_numlock enable
-	xkb_options "compose:lctrl-altgr"
+	xkb_options "compose:lctrl-altgr,grp:win_space_toggle"
+#	xkb_options "caps:swapescape"
 	repeat_rate 40
 	repeat_delay 250
 }
@@ -85,15 +96,15 @@ input * {
 	bindsym --locked XF86AudioMute exec sound m
 	bindsym --locked XF86AudioLowerVolume exec sound d
 	bindsym --locked XF86AudioRaiseVolume exec sound i
-	bindsym --locked XF86MonBrightnessDown exec brightnessctl set 1%-
-	bindsym --locked XF86MonBrightnessUp exec brightnessctl set 1%+
+	bindsym --locked XF86MonBrightnessDown exec brightnessctl set 1-
+	bindsym --locked XF86MonBrightnessUp exec brightnessctl set 1+
 #
 
 	#bindsym --locked XF86AudioNext exec $menu
 
     # Start a terminal
-    bindsym $mod+Return exec $term; $mov
-    bindsym $mod+shift+Return exec alacritty; $mov
+    bindsym $mod+Return exec $term
+    bindsym $mod+shift+Return exec alacritty
 	bindsym $mod+m exec emozhe
 
     # Kill focused window
@@ -130,42 +141,43 @@ input * {
 	set $mov exec /home/ntk/src/curser
     # Move your focus around
     # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left; $mov
-    bindsym $mod+Down focus down; $mov
-    bindsym $mod+Up focus up; $mov
-    bindsym $mod+Right focus right; $mov
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
 
     # Move the focused window with the same, but add Shift
     # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left; $mov
-    bindsym $mod+Shift+Down move down; $mov
-    bindsym $mod+Shift+Up move up; $mov
-    bindsym $mod+Shift+Right move right; $mov
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
 #
 # Workspaces:
 #
     # Switch to workspace
-    bindsym $mod+plus workspace number 1; $mov
-    bindsym $mod+ecaron workspace number 2; $mov
-    bindsym $mod+scaron workspace number 3; $mov
-    bindsym $mod+ccaron workspace number 4; $mov
-    bindsym $mod+rcaron workspace number 5; $mov
-    bindsym $mod+zcaron workspace number 6; $mov
-    bindsym $mod+yacute workspace number 7; $mov
-    bindsym $mod+aacute workspace number 8; $mov
-    bindsym $mod+iacute workspace number 9; $mov
-    bindsym $mod+eacute workspace number 10; $mov
+    bindsym $mod+plus workspace 1:I
+    bindsym $mod+ecaron workspace 2:II
+    bindsym $mod+scaron workspace 3:III
+    bindsym $mod+ccaron workspace 4:IV
+    bindsym $mod+rcaron workspace 5:V
+    bindsym $mod+zcaron workspace 6:VI
+    bindsym $mod+yacute workspace 7:VII
+    bindsym $mod+aacute workspace 8:VIII
+    bindsym $mod+iacute workspace 9:IX
+    bindsym $mod+eacute workspace 10:X
     # Move focused container to workspace
-    bindsym $mod+1 move container to workspace number 1; $mov
-    bindsym $mod+2 move container to workspace number 2; $mov
-    bindsym $mod+3 move container to workspace number 3; $mov
-    bindsym $mod+4 move container to workspace number 4; $mov
-    bindsym $mod+5 move container to workspace number 5; $mov
-    bindsym $mod+6 move container to workspace number 6; $mov
-    bindsym $mod+7 move container to workspace number 7; $mov
-    bindsym $mod+8 move container to workspace number 8; $mov
-    bindsym $mod+9 move container to workspace number 9; $mov
-    bindsym $mod+0 move container to workspace number 10; $mov
+    bindsym $mod+1 move container to workspace 1:I
+    bindsym $mod+2 move container to workspace 2:II
+    bindsym $mod+3 move container to workspace 3:III
+    bindsym $mod+4 move container to workspace 4:IV
+    bindsym $mod+5 move container to workspace 5:V
+    bindsym $mod+6 move container to workspace 6:VI
+    bindsym $mod+7 move container to workspace 7:VII
+    bindsym $mod+8 move container to workspace 8:VIII
+    bindsym $mod+9 move container to workspace 9:IX
+    bindsym $mod+0 move container to workspace 10:X
+#    bindsym $mod+0 move container to workspace number 10
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 #
@@ -226,10 +238,12 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+bindsym $mod+F4 exec sol
+
 bindsym Print exec slorp
 
 #bar {
-#    position bottom
+#    position top
 #
 #    # When the status_command prints a new line to stdout, swaybar updates.
 #    # The default just shows the current date and time.
@@ -245,7 +259,7 @@ bindsym Print exec slorp
 #        urgent_workspace   #ffffff #900000 #ffffff
 #    }
 #}
-
+#
 for_window [title="ALSA"] floating enable, move position 1200 -116, resize set 554 360
 #for_window [title="INTERNET"] floating enable, move position 1224 -186, resize set 554 268
 for_window [title="INTERNET"] floating enable, move position 1200 -162, resize set 554 268
@@ -263,13 +277,33 @@ for_window [title="STATUS"] floating enable, move position 1396 695, resize set 
 xwayland enable
 
 smart_borders on
-smart_gaps on
-gaps inner 16
-font cozette 8
+#smart_gaps on
+#gaps inner 16
+#font cozette 8
 default_border pixel 2
 default_floating_border pixel 2
 client.unfocused #!?unfocused #!?unfocused #ffffff #!?unfocused #!?unfocused
+client.focused_inactive #!?unfocused #!?unfocused #ffffff #!?unfocused #!?unfocused
 #client.unfocused #!?background #!?background #ffffff #!?background #!?background
 client.focused #!?focused #!?focused #ffffff #!?focused #!?focused
 #client.focused #!?background #!?background #ffffff #!?background #!?background
 include /etc/sway/config.d/*
+
+
+###################################################################################šš
+
+### Appearance
+# window corner radius in px
+#corner_radius 0
+
+# Window background blur
+#blur off
+#blur_xray off
+#blur_passes 2
+#blur_radius 5
+
+#shadows off
+#shadows_on_csd off
+#shadow_blur_radius 20
+#shadow_color #0000007F
+#layer_effects "panel" blur enable; shadows enable; corner_radius 0

@@ -79,7 +79,7 @@
  '(highlight-indent-guides-method 'character)
  '(highlight-indent-guides-responsive 'top)
  '(package-selected-packages
-   '(gruvbox-theme exwm pdf-tools evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
+   '(yaml gruvbox-theme exwm pdf-tools evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
  '(standard-indent -1)
  '(warning-suppress-log-types
    '((comp)
