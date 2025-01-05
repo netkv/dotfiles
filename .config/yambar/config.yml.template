@@ -1,44 +1,46 @@
-# Typical laptop setup, with wifi, brightness, battery etc, for
-# i3/Sway.
+# ; -*-yaml-*-
+elac: &elac {
+  stack: [
+    background: {          color: !?element-bgff},
+    border:     { size: 2, color: !?innerff},
+    border:     { size: 1, color: !?borderff},
+    underline:  { size: 1, color: !?shadowff},
+    overline:   { size: 1, color: !?highlightff}
+  ]
+}
 
-# For X11/i3, you'll want to replace calls to swaymsg with i3-msg, and
-# the sway-xkb module with the xkb module.
+el: &el {
+  stack: [
+    background: {          color: !?element-bgff},
+    border:     { size: 3, color: !?inactive-innerff},
+    border:     { size: 2, color: !?inactive-borderff},
+    underline:  { size: 2, color: !?inactive-shadowff},
+    overline:   { size: 2, color: !?inactive-highlightff},
+    overline:   { size: 1, color: !?inactive-innerff},
+    border:     { size: 1, color: !?element-bgff}
+  ]
+}
 
-# fonts we'll be re-using here and there
-#cozette: &cozette Font Cozette 6 Free:style=solid:pixelsize=14
-#cozette_brands: &cozette_brands Font Cozette 6 Brands:pixelsize=16
-
-std_underline: &std_underline {underline: { size: 4, color: !?backgroundff}}
 
 # This is THE bar configuration
 bar:
-  height: 32
+  height: 26
   location: top
-  spacing: 8
+  spacing: 1
   margin: 0
   layer: bottom
-
   # Default font
   font: cozette:pixelsize=13
 
-  foreground: !?foregroundff
-  background: !?background!?yambar:opacity
+  foreground: !?element-fgff
+  background: !?backgrounddf
 
-  border:
-    width: 0
-    color: 000000ff
+    
+  border: {
+    width: 3,
+    color: 00000000,
     margin: 0
-    top-margin: 0
-
-  center:
-    - clock:
-        time-format: "%H:%M"
-        date-format: "%-d.%-m.%-y"
-        content:
-#          - string: {text: }
-#          - string: {text: "{date}", right-margin: 5}
-          - string: {text: " {time}"}
-          - string: {foreground: !?bar-accentff, text: " {date}"}
+  }
 
   left:
     - i3:
@@ -46,9 +48,9 @@ bar:
           - string: &i3_common {margin: 0, on-click: "swaymsg --quiet workspace {name}"}
           - string: &default {<<: *i3_common, text: "  {name}  "}
           - focused: &focused
-              foreground: !?foregroundff
-#              deco: {stack: [background: {color: !?blackff}]}
-          - invisible: &invisible {foreground: !?bar-accentff}
+              deco: *elac
+              foreground: !?accentff
+          - invisible: &invisible {deco: *el}
           - urgent: &urgent
               foreground: 000000ff
               deco: {stack: [background: {color: bc2b3fff}]}
@@ -57,7 +59,7 @@ bar:
                 - string:
                     margin: 4
                     text: "{mode}"
-                    deco: {background: {color: cc421dff}}
+                    deco: *el
                 - empty: {right-margin: 7}
               conditions:
                 mode == default: {empty: {}}
@@ -71,149 +73,257 @@ bar:
                 state == urgent:    {string: {<<: [*default, *urgent]}}
         sort: native
         strip-workspace-numbers: yes
+    !?yambar-spacer
+    - i3:
+        content:
+          "":
+            map:
+              default: {string: {text: ""}}
+              conditions:
+                state == focused: {
+                  string: {
+                    text: " {mode} ",
+                    deco: *el
+                  }
+                }
+
+
     - foreign-toplevel:
         content:
           map:
             conditions:
               ~activated: {empty: {}}
               activated:
-                #- string: {text: "{app-id}", foreground: ffa0a0ff}
-                - string: {text: "{title}"}
+                - string: {text: " {app-id} ", deco: *el}
+
+    - foreign-toplevel:
+        content:
+          map:
+            conditions:
+              ~activated: {empty: {}}
+              activated:
+                - string: {text: " {title} ", deco: *el}
+
+#    !?yambar-spacer
+  center:
+    - clock: {
+       time-format: "%H:%M",
+        date-format: "%-d.%-m.%-y",
+        content: { string: {
+            text: " {time} {date} ",
+            deco: *el
+        }}
+      }
+
 
   right:
+#    - script:
+#        path: /home/ntk/bin/yambar-acpid
+#        content:
+#          - string:
+#              text: " {acpi} "
+#              deco: *el
+#    - script:
+#        path: /home/ntk/bin/yambar-uptime
+#        content:
+#          - string:
+#              text: " {up} "
+#              deco: *el
+
+#    !?yambar-spacer
+    - alsa:
+        card: hw:1
+        mixer: Master
+        content:
+          map:
+            deco: *el
+            conditions:
+              ~online: {string: {text:  }}
+              online:
+                map:
+                  #on-click: /bin/sh -c "amixer -q sset Speaker unmute && amixer -q sset Headphone unmute && amixer -q sset Master toggle"
+                  conditions:
+                    muted: {string: {text: "  ﱝ  ", foreground: !?commentff}}
+                    ~muted:
+                      ramp:
+                        tag: percent
+                        items:
+                          - string: {text: " {percent}%  "}
+                          - string: {text: " {percent}%  "}
+                          - string: {text: " {percent}%  "}
+    - backlight:
+        name: amdgpu_bl0
+        content:
+          [string: {text: " {percent}%  ", deco: *el}]
+
+
     - removables:
         anchors:
-          drive: &drive { text: }
-          optical: &optical {text: }
+          drive: &drive { deco: *el, text: "  "}
+          optical: &optical {deco: *el, text: }
         spacing: 5
         content:
           map:
             conditions:
               ~mounted:
                 map:
-                  on-click: udisksctl mount -b {device}
                   conditions:
-                    ~optical: [{string: *drive}, {string: {text: "{label}"}}]
-                    optical: [{string: *optical}, {string: {text: "{label}"}}]
+                    ~optical: [{string: {deco: *el,text: " {device} | {label} "}}]
+                    optical: [{string: {deco: *el, text: " {label} o "}}]
               mounted:
                 map:
-                  on-click: udisksctl unmount -b {device}
                   conditions:
                     ~optical:
-                      - string: {<<: *drive, deco: *std_underline}
-                      - string: {text: "{label}"}
+                      #Ψ
+#                      - string: {<<: *drive, deco: *el}
+                      - string: {deco: *el,text: " {device} > {mount_point} | {label} "}
                     optical:
-                      - string: {<<: *optical, deco: *std_underline}
+                      - string: {<<: *optical, deco: *el}
                       - string: {text: "{label}"}
-    - alsa:
-        foreground: !?bar-accentff
-        card: hw:1
-        mixer: Master
-        content:
-          map:
-#            deco: {stack: [background: {color: !?redff}]}
-            conditions:
-              ~online: {string: {text: , foreground: ff0000ff}}
-              online:
-                map:
-                  #on-click: /bin/sh -c "amixer -q sset Speaker unmute && amixer -q sset Headphone unmute && amixer -q sset Master toggle"
-                  conditions:
-                    muted: {string: {text: , foreground: ffffff66}}
-                    ~muted:
-                      ramp:
-                        tag: percent
-                        items:
-                          - [string: {text: "{percent}% "}, string: {text: " ", foreground: !?foregroundff}]
-                          - [string: {text: "{percent}% "}, string: {text: " ", foreground: !?foregroundff}]
-                          - [string: {text: "{percent}% "}, string: {text: " ", foreground: !?foregroundff}]
         
     - network:
-        name: eno1
         content:
           map:
+            default: {empty: {}}
             conditions:
-              ~carrier: {empty: {}}
-              carrier:
+              name == eno1:
                 map:
-                  default: {string: {text: X, foreground: ffffff66}}
+                  deco: *el
                   conditions:
-                    state == up && ipv4 != "": {string: {text: }}
+                    ~carrier: {empty: {}}
+                    carrier:
+                      map:
+                        default: {string: {text: "  "}}
+                        conditions:
+                          state == up && ipv4 != "": {string: {text: " {name} {ipv4} "}}
     - network:
-        name: wlo1
-        foreground: !?bar-accentff
         poll-interval: 1000
         content:
           map:
-            default: {string: {text: , foreground: !?bright-yellowff}}
+            default: {empty: {}}
             conditions:
-              state == down: {string: {text: X, foreground: !?bright-redff}}
-              state == up:
+              name == wlo1:
                 map:
-                  default:
-                    - string: {text: "{ssid} "}
-                    - string: {text: " ", foreground: !?foregroundff}
-
+                  deco: *el
+                  default: {string: {text: "  "}}
                   conditions:
-                    ipv4 == "":
-                      - string: {text: , foreground: ffffff66}
-                      - string: {text: "{ssid} {dl-speed:mb}/{ul-speed:mb} Mb/s", foreground: ffffff66}
-    - cpu:
-        poll-interval: 5000
-        foreground: !?bar-accentff
-        content:
-          map:
-            conditions:
-              id < 0:
-                - string: {text: "{cpu}% "}
-                - string: {text: " ", foreground: !?foregroundff}
-    - mem:
-        poll-interval: 5000
-        foreground: !?bar-accentff
-        content:
-          - string: {text: "{used:mib}MiB "}
-          - string: {text: "Ξ ", foreground: !?foregroundff}
+                    state == down: {empty: {}}
+                    state == up:
+                      map:
+                        default:
+                          - string: {text: " {ipv4}  "}
 
-    - backlight:
-        name: amdgpu_bl0
-        foreground: !?bar-accentff
-        content:
-          - string: {text: "{percent}% "}
-          - string: {text: " ", foreground: !?foregroundff}
-        
+                        conditions:
+                          ipv4 == "":
+                            - string: {text: , foreground: ffffff66}
+                            - string: {text: "{ssid} {dl-speed:mb}/{ul-speed:mb} Mb/s", foreground: ffffff66}
+#    !?yambar-spacer
+#    - disk-io:
+#        poll-interval: 1000
+#        content:
+#          map:
+#            conditions:
+#              device == Total:
+#                list:
+#                  items:
+#                    - map:
+#                        deco: *el                        
+#                        default: {string: {text: " read: {read_speed} B/s "}}
+#                        conditions:
+#                          read_speed > 1073741824:
+#                            string: {text: " read: {read_speed:gib} GiB/s "}
+#                          read_speed > 1048576:
+#                            string: {text: " read: {read_speed:mib} MiB/s "}
+#                          read_speed > 1024:
+#                            string: {text: "read: {read_speed:kib} KiB/s "}
+#                    - map:
+#                        deco: *el
+#                        default: {string: {text: " write: {write_speed} B/s "}}
+#                        conditions:
+#                          write_speed > 1073741824:
+#                            string: {text: " write: {write_speed:gib} GiB/s "}
+#                          write_speed > 1048576:
+#                            string: {text: " write: {write_speed:mib} MiB/s "}
+#                          write_speed > 1024:
+#                            string: {text: " write: {write_speed:kib} KiB/s "}
+#    - cpu: {
+#        poll-interval: 5000,
+#        content: { map: { conditions: { id < 0: { string: {
+#              text: " {cpu}%  ",
+#              deco: *el
+#        }}}}}
+#      }
+#      
+#    - mem: {
+#        poll-interval: 5000,
+#        content: { string: {
+#          text: " {used:mib}MiB Ξ ",
+#          deco: *el
+#        }}
+#      }
+#
+#    - script:
+#        path: /home/ntk/bin/yambar-temperature
+#        args: [--poll-interval, 2000]
+#        content:
+#          - string:
+#              text: " {temperature}°C " #
+#              deco: *el
+#
+#    - script:
+#        path: /home/ntk/bin/yambar-watt
+#        content:
+#          - string:
+#              text: " {watt}W  "
+#              deco: *el
+    !?yambar-spacer
     - battery:
-        foreground: !?bar-accentff
         name: BAT1
         poll-interval: 360
         anchors:
           discharging: &discharging
             list:
               items:
-                - string: {text: "{capacity}% "}
+                - string: {text: " {capacity}% "}
                 - ramp:
                     tag: capacity
                     items:
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
-                      - string: {text: " ", foreground: !?foregroundff}
+                      - string: {text: " ", foreground: !?badff}
+                      - string: {text: " ", foreground: !?badff}
+                      - string: {text: " "}
+                      - string: {text: " "}
+                      - string: {text: " "}
+                      - string: {text: " "}
+                      - string: {text: " "}
+                      - string: {text: " "}
+                      - string: {text: " "}
+                      - string: {text: " "}
         content:
           map:
+            deco: *el
             conditions:
               state == unknown:
                 <<: *discharging
               state == discharging:
                 <<: *discharging
               state == charging:
-                - string: {text: "{capacity}% + ", foreground: !?bright-greenff}
+                - string: {text: " + {capacity}% ", foreground: !?accentff}
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+                      - string: {text: " ", foreground: !?accentff}
+
               state == full:
-                - string: {text: , foreground: 00ff00ff}
-                - string: {text: "{capacity}% full"}
+                - string: {text: " {capacity}%  ", foreground: !?accentff}
               state == "not charging":
                 - ramp:
                     tag: capacity
@@ -228,4 +338,4 @@ bar:
                       - string: {text:  , foreground: 00ff00ff}
                       - string: {text:  , foreground: 00ff00ff}
                       - string: {text:  , foreground: 00ff00ff}
-                - string: {text: "{capacity}%"}
+                - string: {text: " {capacity}% "}

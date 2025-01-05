@@ -10,25 +10,67 @@
 
 (if (string= (getenv "THEME") "light")
     (load-theme 'gruvbox-light-medium t)
+;   (load-theme 'bloat t)
    (load-theme 'bloat t)
    (if (not (display-graphic-p))
        (set-face-background 'default "#ff000000"))
    '(default ((t (:inherit nil :extend nil :stipple nil :background "#000000" :foreground "#ebdbb2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "slavfox" :family "Cozette"))))
-)
+   )
+
+
+;(scroll-bar-mode -1)
+;(menu-bar-mode -1)
+
+
+;; (require 'spacious-padding)
+
+;; ;; These is the default value, but I keep it here for visiibility.
+;; (setq spacious-padding-widths
+;;       '( :internal-border-width 16
+;;          :header-line-width 4
+;;          :mode-line-width 6
+;;          :tab-width 4
+;;          :right-divider-width 30
+;;          :scroll-bar-width 8
+;;          :fringe-width 8))
+
+;; ;; Read the doc string of `spacious-padding-subtle-mode-line' as it
+;; ;; is very flexible and provides several examples.
+;; ;;(setq spacious-padding-subtle-mode-line
+;; ;;      `( :mode-line-active 'default
+;; ;;         :mode-line-inactive vertical-border))
+
+;; (spacious-padding-mode 1)
+
+;; ;; Set a key binding if you need to toggle spacious padding.
+;; (define-key global-map (kbd "<f5>") #'spacious-padding-mode)
+
+
 ;;colours something idk
 ;theme
 
 (set-face-attribute 'menu nil
                     :inverse-video nil
-                    :background "#cc8844"
-                    :foreground "#000000")
-(menu-bar-mode -1)
-(face-spec-set 'mode-line
-  '((((class color) (min-colors 88))
-     :box (:line-width -1 :style released-button)
-     )
-    (t
-     :inverse-video t)))
+					:underline t
+                    :background "#000000"
+                    :foreground "#808080")
+
+(set-face-attribute 'mode-line nil
+                    :inverse-video t
+					:underline nil
+                    :background "#000000"
+                    :foreground "#808080")
+
+;(setq-default mode-line-end-spaces "═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════")
+(setq-default mode-line-end-spaces "")
+
+(menu-bar-mode t) ;;;;;;;;;;;;;;;;
+;(face-spec-set 'mode-line
+;  '((((class color) (min-colors 88))
+;     :box (:line-width -1 :style released-button)
+;     )
+;    (t
+;     :inverse-video t)))
 (tool-bar-mode -1)
 ;(set-fringe-mode 0)
 (face-spec-set 'mode-line-inactive
@@ -50,8 +92,9 @@
 			)
 		  )
 ;indent look
-(defface my-highlighter-even-face '((t :foreground "#602030")) "")
-(defface my-highlighter-odd-face '((t :foreground "#224433")) "")
+
+(defface my-highlighter-even-face '((t :foreground "#101010")) "")
+(defface my-highlighter-odd-face '((t :foreground "#808080")) "")
 
 (defun my-highlighter (level responsive display)
   (if (cl-evenp level)
@@ -79,7 +122,8 @@
  '(highlight-indent-guides-method 'character)
  '(highlight-indent-guides-responsive 'top)
  '(package-selected-packages
-   '(yaml gruvbox-theme exwm pdf-tools evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
+   '(solarized-theme yaml gruvbox-theme exwm pdf-tools evil evil-visual-mark-mode hl-todo execline neotree highlight-indent-guides zig-mode yaml-mode bfbuilder rust-mode flycheck))
+ '(safe-local-variable-values '((eval colorful-mode t)))
  '(standard-indent -1)
  '(warning-suppress-log-types
    '((comp)
@@ -136,10 +180,8 @@
 
 (global-prettify-symbols-mode 1)
 
-;;;;(scroll-bar-mode -1)
 (add-hook 'after-init-hook 'global-flycheck-mode)
 (mouse-wheel-mode t)
- ;;(menu-bar-mode -1) 
 (global-set-key (kbd "M-o") (lambda () (interactive) (save-buffers-kill-terminal)))
 ;;(global-set-key (kbd "M-p") (lambda () (interactive) (menu-bar-mode)))
 (global-set-key (kbd "M-n") (lambda () (interactive) (save-buffer)))
@@ -259,3 +301,13 @@
 (global-set-key (kbd "s-t") 'vterm)
 
 ;(setq-default mode-line-format nil)
+;(setq-default mode-line-end-spaces '(:eval (unless (display-graphic-p) "%-")))
+
+										;(defvar mode-line-end-spaces '(:eval (unless (display-graphic-p) "-a-")))
+;
+;
+
+(define-key text-mode-map (kbd "TAB") 'self-insert-command)
+
+(load "~/.emacs.d/stuff/nscr")
+(load "~/.emacs.d/stuff/high")

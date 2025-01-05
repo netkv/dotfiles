@@ -2,8 +2,14 @@
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 set $prefix Mod1
+
+set $left Left
+set $right Right
+set $up Up
+set $down Down
+
 # Home row direction keys, like vim
-#seat * hide_cursor 4000
+seat * hide_cursor 4000
 #seat * hide_cursor when-typing enable
 # Your preferred terminal emulator
 
@@ -11,16 +17,7 @@ set $term alacritty
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened on the original workspace that the command was run on.
-set $menu bemenu-run -H 24\
-	--list 24 --center -M 512 -B 16\
-	--tb "#!?red" --tf "#!?background"\
-	--bdr "#!?background"\
-	--af "#!?foreground" --ab "#!?background"\
-	--nf "#!?foreground" --nb "#!?background"\
-	--ff "#!?foreground" --fb "#!?background"\
-	--hb "#!?red" --hf "#!?background"\
-	--hp 4 --cw 1 --ch 12 --fn 'cozette 11'\
-	-p '' | xargs swaymsg exec --
+set $menu menu | xargs swaymsg exec --
 
 ### Output configuration
 #
@@ -30,16 +27,26 @@ set $menu bemenu-run -H 24\
 #output * bg "~/Stažené/oknart.png" fill
 #output * bg "~/Stažené/blut.png" tile
 #output * bg "~/garbáž/zdje/coloa.png" tile
-output * bg "~/garbáž/zdje/hele.png" tile
+#output * bg "~/garbáž/zdje/builtin-solarized-dark/hele.png" tile
+#output * bg "~/garbáž/zdje/builtin-solarized-dark/sextext-gruv.png" fill
+#output * bg "~/garbáž/zdje/cross.jpg" fill
 #output * bg "~/garbáž/zdje/hente2.png" fill
-#output * bg "~/garbáž/zdje/wargir.jpg" fill
+#output * bg "~/garbáž/zdje/builtin-solarized-dark/wargir.jpg" fill
 #output * bg "~/garbáž/zdje/kytk.jpg" fill
 #output * bg "~/garbáž/zdje/munt.png" Fill
+#output * bg "~/garbáž/zdje/sol/builtin-solarized-dark/znádraží2.jpg" fill
+#output * bg "~/garbáž/zdje/sol/manualosol/zfrontu1-opt.png" fill
+#output * bg "~/garbáž/zdje/sol/manualosol/zfrontu1-opt2.png" fill
+#output * bg "~/garbáž/zdje/angel.png" Fill
+#output * bg "~/garbáž/zdje/sol.jpg" Fill
+#output * bg "~/garbáž/zdje/solprádlo.jpg" Fill
+#output * bg "~/garbáž/zdje/solcity.jpg" Fill
+#output * bg "~/garbáž/zdje/solanděl.png" center
 #output * bg "~/garbáž/zdje/hellme.png" Fill
 #output * bg "~/garbáž/zdje/px-hyperdzjapan-final.png" Center
 #output * bg "~/garbáž/zdje/px-hypersky.jpg" Center
 #output * bg "~/garbáž/zdje/removethegirl.png" Fill
-#output * bg "~/garbáž/zdje/removethegir-darkl.png" Fill
+#output * bg "~/garbáž/zdje/builtin-solarized-dark/jezus.jpg" Fill
 #output * bg "~/garbáž/zdje/angleredg.png" Fill
 #output * bg "~/garbáž/zdje/anglepur.png" Fill
 #output * bg "~/garbáž/zdje/angle.jpg" Fill
@@ -47,12 +54,19 @@ output * bg "~/garbáž/zdje/hele.png" tile
 #output * bg "~/garbáž/zdje/px-vesmíř.png" Center
 #output * bg "~/garbáž/zdje/px-hyperdzjapan.jpg" Fill
 #output * bg "~/garbáž/zdje/mecz.jpg" Fill
+#output * bg "~/garbáž/zdje/fish.jpg" Fill
+#output * bg "~/garbáž/zdje/palma.jpg" Fill
+#output * bg "~/garbáž/zdje/builtin-solarized-dark/104.jpg" Fill
+#output * bg "~/garbáž/zdje/walls/calder-moore-aliencrack_solarized-dark.jpg" Fill
+output * bg "~/garbáž/zdje/hentaimad-cut-16x9.png" Fit
 
-output * scale_filter nearest
+#output * scale_filter nearest
 
 #output eDP-1 mode --custom 1920x1080@60hz scale_filter nearest
+output eDP-1 mode --custom 1920x1080@62hz
 #output eDP-1 mode --custom 1920x1080@80hz
 #output eDP-1 mode --custom 640x480@60hz
+
 
 #
 # Example configuration:
@@ -74,7 +88,8 @@ input * {
 	xkb_layout "cz,cz"
 	xkb_variant ",rus"
 	xkb_numlock enable
-	xkb_options "compose:lctrl-altgr,grp:win_space_toggle"
+	xkb_options "grp:win_space_toggle,ctrl:swapcaps,compose:paus"
+#	xkb_options "grp:win_space_toggle,ctrl:swapcaps,compose:lwin-altgr"
 #	xkb_options "caps:swapescape"
 	repeat_rate 40
 	repeat_delay 250
@@ -86,10 +101,10 @@ input * {
 ### Key bindings
 #
 
-	bindsym $mod+Mod1+Right seat - cursor move 20 0
-	bindsym $mod+Mod1+Left seat - cursor move -20 0
-	bindsym $mod+Mod1+Up seat - cursor move 0 -20
-	bindsym $mod+Mod1+Down seat - cursor move 0 20
+#	bindsym $mod+Mod1+$right seat - cursor move 20 0
+#	bindsym $mod+Mod1+$left seat - cursor move -20 0
+#	bindsym $mod+Mod1+$up seat - cursor move 0 -20
+#	bindsym $mod+Mod1+$down seat - cursor move 0 20
 
 # Basics:
 #
@@ -105,6 +120,7 @@ input * {
     # Start a terminal
     bindsym $mod+Return exec $term
     bindsym $mod+shift+Return exec alacritty
+	bindsym $mod+c exec alacritty -e mc
 	bindsym $mod+m exec emozhe
 
     # Kill focused window
@@ -125,13 +141,16 @@ input * {
 	bindsym $mod+uring exec sh -c 'killall yambar; yambar &'
 	bindsym $mod+uacute exec killall yambar
 	#bindsym $mod+n exec $term -t STATUS  --config-file ~/.config/alacritty/status.yml -e status
-	bindsym $mod+n exec $term -t STATUS -e status
+	bindsym $mod+n exec eww open status
+	bindsym $mod+shift+n exec eww kill
 	bindsym $mod+$prefix+w exec $term -t INTERNET -e wifish
 	bindsym $mod+$prefix+a exec $term -t ALSA -e alsamixer
 
     # Reload the configuration file
     # Reload the configuration file
     bindsym $mod+Shift+c reload
+	
+#    bindsym Pause exec dz
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -141,17 +160,23 @@ input * {
 	set $mov exec /home/ntk/src/curser
     # Move your focus around
     # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
 
     # Move the focused window with the same, but add Shift
     # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
+    bindsym $mod+Shift+$left move left 20
+    bindsym $mod+Shift+$down move down 20
+    bindsym $mod+Shift+$up move up 20
+    bindsym $mod+Shift+$right move right 20
+
+    bindsym $mod+$prefix+$left resize shrink width 20; move left 10
+    bindsym $mod+$prefix+$down resize grow height 20;  move down 10
+    bindsym $mod+$prefix+$up resize shrink height 20;  move up 10
+    bindsym $mod+$prefix+$right resize grow width 20;  move right 10
+
 #
 # Workspaces:
 #
@@ -227,10 +252,10 @@ mode "resize" {
     # down will grow the containers height
 
     # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
 
     # Return to default mode
     bindsym Return mode "default"
@@ -241,32 +266,31 @@ bindsym $mod+r mode "resize"
 bindsym $mod+F4 exec sol
 
 bindsym Print exec slorp
+bindsym $mod+Print exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy 
 
 #bar {
 #    position top
-#
+#	height 2
 #    # When the status_command prints a new line to stdout, swaybar updates.
 #    # The default just shows the current date and time.
-#    status_command while /home/ntk/.config/sway/sex; do sleep 1; done
+##    status_command while /home/ntk/.config/sway/sex; do sleep 1; done
 #
 #    colors {
-#        statusline #ffffff
-#        background #000000
+#        statusline #!?inactive-shadow
+#        background #!?inactive-shadow
 #		
-#        focused_workspace  #ffffff #285577 #ffffff
-#        active_workspace   #ffffff #333333 #ffffff
-#        inactive_workspace #888888 #222222 #ffffff
-#        urgent_workspace   #ffffff #900000 #ffffff
+#        focused_workspace  #!?inactive-shadow #!?inactive-shadow #!?inactive-shadow
+#        active_workspace   #!?inactive-shadow #!?inactive-shadow #!?inactive-shadow
+#        inactive_workspace #!?inactive-shadow #!?inactive-shadow #!?inactive-shadow
+#        urgent_workspace   #!?inactive-shadow #!?inactive-shadow #!?inactive-shadow
 #    }
 #}
-#
-for_window [title="ALSA"] floating enable, move position 1200 -116, resize set 554 360
-#for_window [title="INTERNET"] floating enable, move position 1224 -186, resize set 554 268
-for_window [title="INTERNET"] floating enable, move position 1200 -162, resize set 554 268
-#for_window [title="STATUS"] floating enable, move position 1200 -162, resize set 554 268
-#for_window [title="STATUS"] floating enable, move position 1200 -162, resize set 180 100
+##
+for_window [title="ALSA"] floating enable, move position 560 190, resize set 800 500
+#for_window [title="ALSA"] floating enable, move position 1200 -116, resize set 554 360
+for_window [title="INTERNET"] floating enable, move position 560 190, resize set 800 500
+#for_window [title="INTERNET"] floating enable, move position 1200 -162, resize set 554 268
 for_window [title="STATUS"] floating enable, move position 1396 695, resize set 176 99,border none
-#for_window [app_id="firefox"] border none
 
 #for_window [app_id="org.qbittorrent.qBittorrent"] border pixel 16
 #for_window [title="Question"] floating enable
@@ -277,15 +301,14 @@ for_window [title="STATUS"] floating enable, move position 1396 695, resize set 
 xwayland enable
 
 smart_borders on
-#smart_gaps on
-#gaps inner 16
-#font cozette 8
+smart_gaps on
+gaps inner 6
 default_border pixel 2
 default_floating_border pixel 2
-client.unfocused #!?unfocused #!?unfocused #ffffff #!?unfocused #!?unfocused
-client.focused_inactive #!?unfocused #!?unfocused #ffffff #!?unfocused #!?unfocused
+client.unfocused #!?unfocused #!?unfocused #ffffff #!?bright-yellow7f #!?unfocused
+client.focused_inactive #!?unfocused #!?unfocused #ffffff #!?bright-yellow7f #!?unfocused
 #client.unfocused #!?background #!?background #ffffff #!?background #!?background
-client.focused #!?focused #!?focused #ffffff #!?focused #!?focused
+client.focused #!?focused #!?focused #ffffff #!?yellow7f #!?focused
 #client.focused #!?background #!?background #ffffff #!?background #!?background
 include /etc/sway/config.d/*
 
@@ -297,13 +320,29 @@ include /etc/sway/config.d/*
 #corner_radius 0
 
 # Window background blur
-#blur off
-#blur_xray off
-#blur_passes 2
-#blur_radius 5
+blur on
+blur_xray off
+blur_passes 2
+blur_radius 5
 
-#shadows off
-#shadows_on_csd off
-#shadow_blur_radius 20
-#shadow_color #0000007F
-#layer_effects "panel" blur enable; shadows enable; corner_radius 0
+corner_radius 0
+
+shadows on
+shadows_on_csd on
+shadow_blur_radius 4
+shadow_color #000000ff
+layer_effects "panel" blur enable; shadows enable; corner_radius 0
+#layer_effects "panel" blur enable
+
+
+font cozette 8
+#default_border normal 4
+#default_floating_border normal 4
+#titlebar_separator disable
+#titlebar_border_thickness 4
+#titlebar_padding 16 8
+#title_align center 			 
+#client.focused #!?focused #!?background #!?foreground #!?yellow #!?focused
+#client.unfocused #!?unfocused #!?background #!?foreground #!?yellow #!?unfocused
+#smart_borders off
+#smart_gaps off

@@ -1,8 +1,8 @@
 #!/bin/bash
-date
-export GTK_THEME=Plata:dark
-set -o emacs
 [[ $- != *i* ]] && return
+date
+#export GTK_THEME=Plata:dark
+set -o emacs
 #if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
 #	read -rn1 -p '> Sway?' ask
 #	case $ask in
@@ -22,6 +22,10 @@ function batt
 		*)
 			echo "$(</sys/class/power_supply/BAT1/capacity)%"
 	esac
+
+function clock {
+	tty-clock -s -c -C 7
+}
 	
 function states {
 	printf '\e[?25l'
@@ -65,15 +69,85 @@ rat() (
 	cd /bedrock/strata
 	strat "$match"* $@
 )
+function mpvn {
+	printf '%q\n' * | sort -n | xargs mpv --no-audio-display
+}
+function ge {
+	alacritty msg config window.padding.y=20
+	emacs "$@"
+	alacritty msg config window.padding.y=32
+}
+function e {
+	em() {
+		emacs "$@"
+		alacritty
+	}
+	em "$@" &
+	exit
+}
+function htp {
+	alacritty-swap htop
+	htop "$@"
+	alacritty msg config -r
+}
+alias htop='htp'
 
-PS1="\w \[\e[31m\]$\[\e[0m\] \[\e]0;\w\a\]"
+function das {
+	alacritty-swap root
+	doas "$@"
+	alacritty msg config -r
+}
+#alias doas='das'
+
+
+function watt {
+	cat /sys/class/power_supply/BAT1/current_now /sys/class/power_supply/BAT1/voltage_now | xargs | awk '{print $1*$2/1e12 " W"}'
+}
+function eth {
+	doas sh -c 'echo on > "/sys/bus/pci/devices/0000:02:00.0/power/control"'
+}
+
+function cag {
+	XKB_DEFAULT_LAYOUT="cz,cz"\
+	XKB_DEFAULT_VARIANT=",rus"\
+	XKB_DEFAULT_NUMLOCK=enable\
+	XKB_DEFAULT_OPTIONS="compose:lctrl-altgr,grp:win_space_toggle"\
+	REPEAT_RATE=40\
+	REPEAT_DELAY=250\
+	wl cage -s -d alacritty
+}
+
+#PS1="\w \[\e[0;33m\]$\[\e[0m\] \[\e]0;\w\a\]"
+PS1="\w \[\e[1m\]%\[\e[0m\] \[\e]0;\w\a\]"
+
+#PS1="\[\e[4m\w \[\e[1m\]$\[\e[0m\] \[\e]0;\w\a\]"
 shopt -u globstar
 [ "$TERM" = linux ] && {
 #	PROMPT_COMMAND="states"
 #	PROMPT_COMMAND="batt -p"
 #	PS1="\[\e[31m\]$\[\e[0m\] \[\e]0;\w\a\]"
-	setup-tty
+	bash bin/setup-tty
+	PS1="\w % \[\e]0;\w\a\]"
 }
 source posix-alias
 source posix-var
-#[[ ${BLE_VERSION-} ]] && ble-attach
+
+source mcd
+mcd_index=(
+	[soul]="~/Hudba/soul/"
+	[s]="~/Hudba/soul/"
+	[g]="~/garbáž/"
+	[m]="~/mng/"
+	[u]="~/umen/"
+	[ui]="~/umen/img/"
+)
+mcd-index
+
+
+function setupble {
+	bleopt filename_ls_colors="$LS_COLORS"
+	bind 'set completion-ignore-case on'
+	bleopt history_share=1
+	[[ ${BLE_VERSION-} ]] && ble-attach
+}
+#setupble

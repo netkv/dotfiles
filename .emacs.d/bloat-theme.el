@@ -51,7 +51,7 @@
  '(query-replace ((t (:inherit (isearch)))))
  '(flycheck-error ((((supports :underline (:style wave))) (:underline (:color "Red1" :style wave))) (t (:inherit (error) :underline (:color foreground-color :style line)))))
  '(flycheck-info ((t (:foreground "#ff4066" :underline t))))
- '(default ((t (:family "default" :foundry "default" :width normal :height 1 :weight normal :slant normal :underline nil :overline nil :extend nil :strike-through nil :box nil :inverse-video nil :foreground "#ebdbb2" :background "black" :stipple nil :inherit nil))))
+ '(default ((t (:family "default" :foundry "default" :width normal :height 1 :weight normal :slant normal :underline nil :overline nil :extend nil :strike-through nil :box nil :inverse-video nil :foreground "#a09070" :background "black" :stipple nil :inherit nil))))
  '(flycheck-warning ((t (:foreground "#ff6644" :underline t))))
  '(sh-heredoc ((t (:foreground "#cc8844")))))
 (provide-theme 'bloat)
